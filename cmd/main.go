@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mygram/handler"
 	"mygram/infra"
+	"mygram/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,6 +23,13 @@ func StartApp() *gin.Engine {
 	{
 		userRouter.POST("/register", handler.UserRegistration)
 		userRouter.POST("/login", handler.UserLogin)
+		// userRouter.Use(middlewares.Authentication())
+		// userRouter.PUT("/:userId", handler.UpdateUser)
+	}
+	photoRouter := r.Group("/photos")
+	{
+		photoRouter.Use(middlewares.Authentication())
+		photoRouter.POST("/", handler.CreatePhoto)
 	}
 	return r
 }

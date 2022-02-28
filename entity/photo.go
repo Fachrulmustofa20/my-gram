@@ -7,11 +7,11 @@ import (
 
 type Photo struct {
 	GormModel
-	Title     string `json:"title" form:"title" valid:"required~Title of your photo is required"`
-	Caption   string `json:"caption" form:"title"`
-	Photo_url string `json:"photo_url" form:"photo_url" valid:"required~Photo url of your photo is required"`
-	User_id   uint
-	User      *User
+	Title    string `json:"title" form:"title" valid:"required~Title of your photo is required"`
+	Caption  string `json:"caption" form:"title"`
+	PhotoUrl string `json:"photo_url" form:"photo_url" valid:"required~Photo url of your photo is required"`
+	UserId   uint
+	User     *User
 }
 
 func (p *Photo) BeforeCreate(tx *gorm.DB) (err error) {
