@@ -37,3 +37,6 @@ func CreatePhoto(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, Photo)
 }
+
+func GetPhotos(c *gin.Context) {
+}

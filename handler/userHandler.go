@@ -104,6 +104,7 @@ func UpdateUser(c *gin.Context) {
 	err := db.Model(&user).Where("id = ?", userId).Updates(entity.User{
 		Email:    user.Email,
 		Username: user.Username,
+		Age:      user.Age,
 	}).Error
 
 	if err != nil {
@@ -121,4 +122,8 @@ func UpdateUser(c *gin.Context) {
 		"age":        user.Age,
 		"updated_at": user.UpdatedAt,
 	})
+}
+
+func DeleteUser(c *gin.Context) {
+
 }

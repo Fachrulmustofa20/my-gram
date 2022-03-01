@@ -23,8 +23,9 @@ func StartApp() *gin.Engine {
 	{
 		userRouter.POST("/register", handler.UserRegistration)
 		userRouter.POST("/login", handler.UserLogin)
-		// userRouter.Use(middlewares.Authentication())
-		// userRouter.PUT("/:userId", handler.UpdateUser)
+
+		userRouter.Use(middlewares.Authentication())
+		userRouter.PUT("/:userId", handler.UpdateUser)
 	}
 	photoRouter := r.Group("/photos")
 	{
