@@ -93,6 +93,14 @@ func UpdateUser(c *gin.Context) {
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	UserID := uint(userData["id"].(float64))
 
+	if userId != int(UserID) {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
+			"error":   "Unauthorized",
+			"message": "You are not allowed to access this data",
+		})
+		return
+	}
+
 	if contentType == appJSON {
 		c.ShouldBindJSON(&user)
 	} else {
@@ -134,9 +142,9 @@ func DeleteUser(c *gin.Context) {
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	UserID := uint(userData["id"].(float64))
 
-	// jika token userData pada id tidak sama
+	// jika token userData pada id tidak sama dengan param
 	if userId != int(UserID) {
-		c.JSON(http.StatusUnauthorized, gin.H{
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"error":   "Unauthorized",
 			"message": "you are not allowed to access this data",
 		})
