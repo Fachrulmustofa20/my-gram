@@ -125,5 +125,42 @@ func UpdateUser(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
+	db := infra.GetDB()
+	userData := c.MustGet("userData").(jwt.MapClaims)
+	contentType := utils.GetContentType(c)
+	_ = contentType
+	User := entity.User{}
 
+	userId, _ := strconv.Atoi(c.Param("userId"))
+	UserID := uint(userData["id"].(float64))
+
+	// jika token userData pada id tidak sama
+	if userId != int(UserID) {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"error":   "Unauthorized",
+			"message": "you are not allowed to access this data",
+		})
+		return
+	}
+
+	err := db.Debug().First(&User, userId).Error
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error":   "Data not found",
+			"message": "Data doesn't exist",
+		})
+		return
+	}
+
+	err = db.Debug().Delete(&User).Error
+	if err != nil {
+		c.JSON(http.StatusNotImplemented, gin.H{
+			"error":   err.Error(),
+			"message": "Delete failed",
+		})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Your account has been successfully deleted",
+	})
 }
