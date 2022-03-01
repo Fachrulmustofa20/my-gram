@@ -162,10 +162,11 @@ func DeleteUser(c *gin.Context) {
 
 	err = db.Debug().Delete(&User).Error
 	if err != nil {
-		c.JSON(http.StatusNotImplemented, gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   err.Error(),
 			"message": "Delete failed",
 		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{

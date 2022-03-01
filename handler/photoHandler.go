@@ -76,3 +76,34 @@ func UpdatePhoto(c *gin.Context) {
 
 	c.JSON(http.StatusOK, Photo)
 }
+
+func DeletePhoto(c *gin.Context) {
+	db := infra.GetDB()
+	contentType := utils.GetContentType(c)
+	_ = contentType
+	Photo := entity.Photo{}
+
+	photoId, _ := strconv.Atoi(c.Param("photoId"))
+
+	err := db.Debug().First(&Photo, photoId).Error
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error":   "Data Not Found",
+			"message": "Data doesn't exist",
+		})
+		return
+	}
+
+	err = db.Debug().Delete(&Photo).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   err.Error(),
+			"message": "Delete Failed",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Your photo has been successfully deleted",
+	})
+}
