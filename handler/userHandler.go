@@ -46,13 +46,13 @@ func UserRegistration(c *gin.Context) {
 
 func UserLogin(c *gin.Context) {
 	db := infra.GetDB()
-	contextType := utils.GetContentType(c)
-	_, _ = db, contextType
+	contentType := utils.GetContentType(c)
+	_, _ = db, contentType
 
 	user := entity.User{}
 	password := ""
 
-	if contextType == appJSON {
+	if contentType == appJSON {
 		c.ShouldBindJSON(&user)
 	} else {
 		c.ShouldBind(&user)
@@ -142,7 +142,7 @@ func DeleteUser(c *gin.Context) {
 	userId, _ := strconv.Atoi(c.Param("userId"))
 	UserID := uint(userData["id"].(float64))
 
-	// jika token userData pada id tidak sama dengan param
+	// jika token id pada userdata tidak sama dengan param
 	if userId != int(UserID) {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"error":   "Unauthorized",
