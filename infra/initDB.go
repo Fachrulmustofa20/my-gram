@@ -23,7 +23,7 @@ func InitDB() {
 	}
 
 	fmt.Println("Success connecting to database")
-	db.Debug().AutoMigrate(entity.User{}, entity.Photo{}, entity.Comment{})
+	db.Debug().AutoMigrate(entity.User{}, entity.Photo{}, entity.Comment{}, entity.SocialMedia{})
 }
 
 func GetDB() *gorm.DB {

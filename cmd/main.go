@@ -35,5 +35,13 @@ func StartApp() *gin.Engine {
 		photoRouter.PUT("/:photoId", middlewares.PhotoAuthorization(), handler.UpdatePhoto)
 		photoRouter.DELETE("/:photoId", middlewares.PhotoAuthorization(), handler.DeletePhoto)
 	}
+
+	socialMediaRouter := r.Group("/socialmedias")
+	{
+		socialMediaRouter.Use(middlewares.Authentication())
+		socialMediaRouter.POST("/", handler.CreateSocialMedia)
+		socialMediaRouter.PUT("/:socialMediaId", middlewares.SocialMediaAuthorization(), handler.UpdateSocialMedia)
+		socialMediaRouter.DELETE("/:socialMediaId", middlewares.SocialMediaAuthorization(), handler.DeleteSocialMedia)
+	}
 	return r
 }
