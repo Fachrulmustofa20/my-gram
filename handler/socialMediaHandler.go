@@ -45,7 +45,7 @@ func GetSocialMedia(c *gin.Context) {
 	_, _ = UserId, contentType
 
 	socialMedia := []entity.SocialMedia{}
-	err := db.Debug().Order("id asc").Preload("User").Find(&socialMedia).Error
+	err := db.Debug().Order("id asc").Preload("User").Where("user_id = ?", UserId).Find(&socialMedia).Error
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

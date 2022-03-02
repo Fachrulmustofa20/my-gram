@@ -63,7 +63,7 @@ func GetAllComment(c *gin.Context) {
 	_ = contentType
 
 	Comment := []entity.Comment{}
-	err := db.Debug().Order("id asc").Preload("User").Preload("Photo").Find(&Comment).Where("user_id = ?", UserId).Error
+	err := db.Debug().Order("id asc").Preload("User").Preload("Photo").Where("user_id = ?", UserId).Find(&Comment).Error
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
