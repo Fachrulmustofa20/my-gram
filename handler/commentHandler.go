@@ -5,6 +5,7 @@ import (
 	"mygram/infra"
 	"mygram/utils"
 	"net/http"
+	"strconv"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -52,4 +53,36 @@ func CreateComment(c *gin.Context) {
 		"created_at": Comment.CreatedAt,
 	})
 
+}
+
+func UpdateComment(c *gin.Context) {
+	db := infra.GetDB()
+	userData := c.MustGet("userData").(jwt.MapClaims)
+	contentType := utils.GetContentType(c)
+	Comment := entity.Comment{}
+
+	commentId, _ := strconv.Atoi(c.Param("commentId"))
+	userId := uint(userData["id"].(float64))
+
+	if contentType == appJSON {
+		c.ShouldBindJSON(&Comment)
+	} else {
+		c.ShouldBind(&Comment)
+	}
+
+	Comment.UserId = userId
+	Comment.ID = uint(commentId)
+
+	err := db.Model(&Comment).Where("id = ?", commentId).Updates(entity.Comment{
+		Message: Comment.Message,
+	}).Error
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, Comment)
 }

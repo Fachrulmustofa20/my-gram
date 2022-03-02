@@ -41,6 +41,7 @@ func StartApp() *gin.Engine {
 	{
 		commentRouter.Use(middlewares.Authentication())
 		commentRouter.POST("/", handler.CreateComment)
+		commentRouter.PUT("/:commentId", middlewares.CommentAuthorization(), handler.UpdateComment)
 	}
 
 	socialMediaRouter := r.Group("/socialmedias")
