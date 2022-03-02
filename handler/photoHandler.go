@@ -39,7 +39,25 @@ func CreatePhoto(c *gin.Context) {
 	c.JSON(http.StatusCreated, Photo)
 }
 
-func GetPhotos(c *gin.Context) {
+func GetAllPhotos(c *gin.Context) {
+	db := infra.GetDB()
+	userData := c.MustGet("userData").(jwt.MapClaims)
+	contentType := utils.GetContentType(c)
+	UserId := uint(userData["id"].(float64))
+	_, _ = UserId, contentType
+
+	photos := []entity.Photo{}
+	err := db.Debug().Order("id asc").Preload("User").Find(&photos).Error
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Internal Server Error",
+			"message": err.Error,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, photos)
 }
 
 func UpdatePhoto(c *gin.Context) {
