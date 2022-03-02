@@ -38,7 +38,26 @@ func CreateSocialMedia(c *gin.Context) {
 }
 
 func GetSocialMedia(c *gin.Context) {
+	db := infra.GetDB()
+	userData := c.MustGet("userData").(jwt.MapClaims)
+	contentType := utils.GetContentType(c)
+	UserId := uint(userData["id"].(float64))
+	_, _ = UserId, contentType
 
+	socialMedia := []entity.SocialMedia{}
+	err := db.Debug().Order("id asc").Preload("User").Find(&socialMedia).Error
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Internal Server Error",
+			"message": err.Error,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"social_medias": socialMedia,
+	})
 }
 
 func UpdateSocialMedia(c *gin.Context) {

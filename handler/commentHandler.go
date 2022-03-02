@@ -55,6 +55,28 @@ func CreateComment(c *gin.Context) {
 
 }
 
+func GetAllComment(c *gin.Context) {
+	db := infra.GetDB()
+	userData := c.MustGet("userData").(jwt.MapClaims)
+	contentType := utils.GetContentType(c)
+	UserId := uint(userData["id"].(float64))
+	_ = contentType
+
+	Comment := []entity.Comment{}
+	err := db.Debug().Order("id asc").Preload("User").Preload("Photo").Find(&Comment).Where("user_id = ?", UserId).Error
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Internal Server Error",
+			"message": err.Error,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, Comment)
+
+}
+
 func UpdateComment(c *gin.Context) {
 	db := infra.GetDB()
 	userData := c.MustGet("userData").(jwt.MapClaims)
