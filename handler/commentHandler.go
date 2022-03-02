@@ -86,3 +86,35 @@ func UpdateComment(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, Comment)
 }
+
+func DeleteComment(c *gin.Context) {
+	db := infra.GetDB()
+	contentType := utils.GetContentType(c)
+	_ = contentType
+	Comment := entity.Comment{}
+
+	commentId, _ := strconv.Atoi(c.Param("commentId"))
+
+	// check comment
+	err := db.Debug().First(&Comment, commentId).Error
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error":   "Data Not Found",
+			"message": "Data doesn't exist",
+		})
+		return
+	}
+
+	err = db.Debug().Delete(&Comment).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   err.Error(),
+			"message": "Delete Failed",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Your comment has been successfully deleted",
+	})
+}
