@@ -29,7 +29,7 @@ func CreateComment(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error":   "Data Not Found",
-			"message": "Data doesn't exist",
+			"message": "Data photo doesn't exist",
 		})
 		return
 	}
