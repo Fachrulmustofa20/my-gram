@@ -119,7 +119,17 @@ func UpdateComment(c *gin.Context) {
 	Comment.UserId = userId
 	Comment.ID = uint(commentId)
 
-	err := db.Model(&Comment).Where("id = ?", commentId).Updates(entity.Comment{
+	// get data comment id to get photo_id
+	err := db.Select("photo_id").First(&Comment, uint(commentId)).Error
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
+			"error":   "Data not found",
+			"message": "Data doesn't exist",
+		})
+		return
+	}
+
+	err = db.Model(&Comment).Where("id = ?", commentId).Updates(entity.Comment{
 		Message: Comment.Message,
 	}).Error
 
