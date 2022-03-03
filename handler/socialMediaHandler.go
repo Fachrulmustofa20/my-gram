@@ -61,8 +61,24 @@ func GetSocialMedia(c *gin.Context) {
 		return
 	}
 
+	response := []map[string]interface{}{}
+	for _, val := range socialMedia {
+		response = append(response, map[string]interface{}{
+			"id":               val.ID,
+			"name":             val.Name,
+			"social_media_url": val.SocialMediaUrl,
+			"UserId":           val.UserId,
+			"createdAt":        val.CreatedAt,
+			"updatedAt":        val.UpdatedAt,
+			"User": map[string]interface{}{
+				"id":       val.User.ID,
+				"username": val.User.Username,
+			},
+		})
+	}
+
 	c.JSON(http.StatusOK, gin.H{
-		"social_medias": socialMedia,
+		"social_medias": response,
 	})
 }
 
