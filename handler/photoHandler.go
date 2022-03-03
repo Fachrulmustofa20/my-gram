@@ -64,7 +64,24 @@ func GetAllPhotos(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, photos)
+	response := []map[string]interface{}{}
+	for _, val := range photos {
+		response = append(response, map[string]interface{}{
+			"id":         val.ID,
+			"title":      val.Title,
+			"caption":    val.Caption,
+			"photo_url":  val.PhotoUrl,
+			"user_id":    val.UserId,
+			"created_at": val.CreatedAt,
+			"updated_at": val.UpdatedAt,
+			"User": map[string]interface{}{
+				"email":    val.User.Email,
+				"username": val.User.Username,
+			},
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
 }
 
 func UpdatePhoto(c *gin.Context) {
