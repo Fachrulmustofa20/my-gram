@@ -73,7 +73,31 @@ func GetAllComment(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, Comment)
+	response := []map[string]interface{}{}
+	for _, val := range Comment {
+		response = append(response, map[string]interface{}{
+			"id":         val.ID,
+			"message":    val.Message,
+			"photo_id":   val.PhotoId,
+			"user_id":    val.UserId,
+			"updated_at": val.UpdatedAt,
+			"created_at": val.CreatedAt,
+			"User": map[string]interface{}{
+				"id":       val.User.ID,
+				"email":    val.User.Email,
+				"username": val.User.Username,
+			},
+			"Photo": map[string]interface{}{
+				"id":        val.Photo.ID,
+				"title":     val.Photo.Title,
+				"caption":   val.Photo.Caption,
+				"photo_url": val.Photo.PhotoUrl,
+				"user_id":   val.Photo.UserId,
+			},
+		})
+	}
+
+	c.JSON(http.StatusOK, response)
 
 }
 
