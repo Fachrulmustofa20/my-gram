@@ -106,7 +106,13 @@ func UpdateComment(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, Comment)
+	c.JSON(http.StatusOK, gin.H{
+		"id":         Comment.ID,
+		"message":    Comment.Message,
+		"user_id":    Comment.UserId,
+		"photo_id":   Comment.PhotoId,
+		"updated_at": Comment.UpdatedAt,
+	})
 }
 
 func DeleteComment(c *gin.Context) {

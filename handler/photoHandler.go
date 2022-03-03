@@ -36,7 +36,14 @@ func CreatePhoto(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, Photo)
+	c.JSON(http.StatusCreated, gin.H{
+		"id":         Photo.ID,
+		"title":      Photo.Title,
+		"caption":    Photo.Caption,
+		"photo_url":  Photo.PhotoUrl,
+		"user_id":    Photo.UserId,
+		"created_at": Photo.CreatedAt,
+	})
 }
 
 func GetAllPhotos(c *gin.Context) {
@@ -92,7 +99,14 @@ func UpdatePhoto(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, Photo)
+	c.JSON(http.StatusOK, gin.H{
+		"id":         Photo.ID,
+		"title":      Photo.Title,
+		"caption":    Photo.Caption,
+		"photo_url":  Photo.PhotoUrl,
+		"user_id":    Photo.UserId,
+		"updated_at": Photo.UpdatedAt,
+	})
 }
 
 func DeletePhoto(c *gin.Context) {

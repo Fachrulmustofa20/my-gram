@@ -34,7 +34,13 @@ func CreateSocialMedia(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusCreated, SocialMedia)
+	c.JSON(http.StatusCreated, gin.H{
+		"id":               SocialMedia.ID,
+		"name":             SocialMedia.Name,
+		"social_media_url": SocialMedia.SocialMediaUrl,
+		"user_id":          SocialMedia.UserId,
+		"created_at":       SocialMedia.CreatedAt,
+	})
 }
 
 func GetSocialMedia(c *gin.Context) {
@@ -90,7 +96,13 @@ func UpdateSocialMedia(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, SocialMedia)
+	c.JSON(http.StatusOK, gin.H{
+		"id":               SocialMedia.ID,
+		"name":             SocialMedia.Name,
+		"social_media_url": SocialMedia.SocialMediaUrl,
+		"user_id":          SocialMedia.UserId,
+		"updated_at":       SocialMedia.UpdatedAt,
+	})
 }
 
 func DeleteSocialMedia(c *gin.Context) {
